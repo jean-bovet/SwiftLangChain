@@ -59,7 +59,7 @@ struct ContentView: View {
 
     func executeAgent() {
         guard let agent = agent.agent else {
-            output = "Unable to create the agent!"
+            displayError(message: "Unable to create the agent")
             return
         }
         Task {
@@ -72,11 +72,15 @@ struct ContentView: View {
                 }
             } catch {
                 DispatchQueue.main.async {
-                    output = "Execution error: \(error)"
-                    running = false
+                    displayError(message: "Execution error: \(error)")
                 }
             }
         }
+    }
+    
+    func displayError(message: String) {
+        output = message
+        running = false
     }
 }
 
