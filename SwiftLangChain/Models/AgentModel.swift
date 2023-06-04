@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OpenAI
 
 final class AgentModel: ObservableObject, Identifiable, Hashable, Equatable {
     static func == (lhs: AgentModel, rhs: AgentModel) -> Bool {
@@ -25,7 +26,8 @@ final class AgentModel: ObservableObject, Identifiable, Hashable, Equatable {
         guard let token = UserDefaults.standard.string(forKey: SettingsKeys.openAI_API_key) else {
             return nil
         }
-        return TravelAgent(engine: OpenAIEngine(apiToken: token), tools: tools.filter(\.enabled).map(\.tool))
+        let model = UserDefaults.standard.string(forKey: SettingsKeys.OpenAIModelKey) ?? Model.gpt3_5Turbo
+        return TravelAgent(engine: OpenAIEngine(apiToken: token, model: model), tools: tools.filter(\.enabled).map(\.tool))
     }
 
     init() {
